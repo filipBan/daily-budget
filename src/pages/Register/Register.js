@@ -2,12 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { State } from "../../App";
 
-import { Button, Input, Form, PageContainer, Snackbar } from "../../components";
+import {
+  Button,
+  Input,
+  Form,
+  Container,
+  Snackbar,
+  Spinner
+} from "../../components";
 
 import { createUser } from "../../firebase/authActions";
 
 function Register() {
   const { dispatch, authState } = useContext(State);
+  const { loading } = authState;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
@@ -29,7 +37,7 @@ function Register() {
   }
 
   return (
-    <PageContainer>
+    <Container>
       <Form onSubmit={submitRegister}>
         <Input
           value={email}
@@ -52,7 +60,7 @@ function Register() {
           required
           onChange={e => setConfPassword(e.target.value)}
         />
-        <Button>Register</Button>
+        <Button disabled={loading}>{loading ? <Spinner /> : "Register"}</Button>
       </Form>
       <Link to="/login">Login</Link>
       <Snackbar
@@ -60,7 +68,7 @@ function Register() {
         type="error"
         onClose={() => dispatch({ type: "CLEAR_AUTH_ERRORS" })}
       />
-    </PageContainer>
+    </Container>
   );
 }
 

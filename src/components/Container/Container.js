@@ -6,14 +6,13 @@ const Component = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: ${props => (props.justify ? props.justify : "center")};
   align-items: center;
-  background-color: #aaa;
   position: relative;
 `;
 
-function PageContainer(props) {
+function Container(props) {
   return <Component {...props} />;
 }
 
-export default PageContainer;
+export default Container;

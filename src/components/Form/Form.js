@@ -9,6 +9,7 @@ const Component = styled.form`
   justify-content: center;
   align-items: center;
   background-color: #ddd;
+  min-height: 25rem;
 `;
 
 function Form({ children, ...props }) {

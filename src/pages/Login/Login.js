@@ -2,12 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { State } from "../../App";
 
-import { Button, Input, Form, PageContainer, Snackbar } from "../../components";
+import {
+  Button,
+  Input,
+  Form,
+  Container,
+  Snackbar,
+  Spinner
+} from "../../components";
 
 import { logIn } from "../../firebase/authActions";
 
 function Login() {
   const { dispatch, authState } = useContext(State);
+  const { loading } = authState;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,7 +36,7 @@ function Login() {
   }
 
   return (
-    <PageContainer>
+    <Container>
       <Form onSubmit={submitLogin}>
         <Input
           value={email}
@@ -44,7 +52,7 @@ function Login() {
           required
           onChange={e => setPassword(e.target.value)}
         />
-        <Button>Login</Button>
+        <Button disabled={loading}>{loading ? <Spinner /> : "Log in"}</Button>
       </Form>
       <Link to="/register">Register</Link>
       <Snackbar
@@ -52,7 +60,7 @@ function Login() {
         type="error"
         onClose={() => dispatch({ type: "CLEAR_AUTH_ERRORS" })}
       />
-    </PageContainer>
+    </Container>
   );
 }
 

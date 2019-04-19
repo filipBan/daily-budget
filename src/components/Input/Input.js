@@ -3,11 +3,11 @@ import styled from "styled-components";
 
 const Component = styled.input`
   width: 20rem;
-  height: 5rem;
+  height: 3rem;
   margin: 1rem;
   padding: 1rem;
   border-radius: 3px;
-  border: none;
+  border: 1px solid #ddd;
   text-align: center;
   font-size: 1.5rem;
 `;
