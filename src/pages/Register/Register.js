@@ -1,14 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import styled from "styled-components";
 import { State } from "../../App";
 
 import { createUser } from "../../firebase/authActions";
 
-function Register({ auth }) {
+function Register() {
   const { dispatch, authState } = useContext(State);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    return () => {
+      dispatch({ type: "CLEAR_ERRORS" });
+    };
+  }, []);
 
   const submitLogin = e => {
     e.preventDefault();
