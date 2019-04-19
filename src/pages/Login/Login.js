@@ -13,7 +13,7 @@ function Login() {
 
   useEffect(() => {
     return () => {
-      dispatch({ type: "CLEAR_ERRORS" });
+      dispatch({ type: "CLEAR_AUTH_ERRORS" });
     };
   }, []);
 
@@ -34,18 +34,24 @@ function Login() {
           value={email}
           placeholder="Email"
           type="email"
+          required
           onChange={e => setEmail(e.target.value)}
         />
         <Input
           value={password}
           placeholder="Password"
           type="password"
+          required
           onChange={e => setPassword(e.target.value)}
         />
         <Button>Login</Button>
       </Form>
       <Link to="/register">Register</Link>
-      <Snackbar value={authState.error} type="error" />
+      <Snackbar
+        value={authState.error}
+        type="error"
+        onClose={() => dispatch({ type: "CLEAR_AUTH_ERRORS" })}
+      />
     </PageContainer>
   );
 }

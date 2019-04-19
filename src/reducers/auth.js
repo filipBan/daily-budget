@@ -39,7 +39,7 @@ function authReducer() {
         };
       case LOG_OUT:
         return initialState;
-      case "CLEAR_ERRORS":
+      case "CLEAR_AUTH_ERRORS":
         return {
           ...state,
           error: null

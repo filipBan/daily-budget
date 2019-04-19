@@ -35,7 +35,11 @@ const Component = styled(Animation)`
 
 function Snackbar(props) {
   return (
-    <Component {...props} pose={props.value ? "visible" : "hidden"}>
+    <Component
+      {...props}
+      pose={props.value ? "visible" : "hidden"}
+      onClick={props.onClose}
+    >
       <span>{props.value}</span>
     </Component>
   );

@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
-import styled from "styled-components";
 import { State } from "../../App";
+
+import { Button, Input, Form, PageContainer, Snackbar } from "../../components";
 
 import { createUser } from "../../firebase/authActions";
 
@@ -9,14 +10,15 @@ function Register() {
   const { dispatch, authState } = useContext(State);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confPassword, setConfPassword] = useState("");
 
   useEffect(() => {
     return () => {
-      dispatch({ type: "CLEAR_ERRORS" });
+      dispatch({ type: "CLEAR_AUTH_ERRORS" });
     };
   }, []);
 
-  const submitLogin = e => {
+  const submitRegister = e => {
     e.preventDefault();
 
     createUser(email, password, dispatch);
@@ -27,23 +29,38 @@ function Register() {
   }
 
   return (
-    <div>
-      <form onSubmit={submitLogin}>
-        <input
+    <PageContainer>
+      <Form onSubmit={submitRegister}>
+        <Input
           value={email}
           placeholder="Email"
+          type="email"
+          required
           onChange={e => setEmail(e.target.value)}
         />
-        <input
+        <Input
           value={password}
           placeholder="Password"
+          type="password"
+          required
           onChange={e => setPassword(e.target.value)}
         />
-        <button>Register</button>
-      </form>
+        <Input
+          value={confPassword}
+          placeholder="Confirm password"
+          type="password"
+          required
+          onChange={e => setConfPassword(e.target.value)}
+        />
+        <Button>Register</Button>
+      </Form>
       <Link to="/login">Login</Link>
-      {authState.error ? <span>{authState.error}</span> : null}
-    </div>
+      <Snackbar
+        value={authState.error}
+        type="error"
+        onClose={() => dispatch({ type: "CLEAR_AUTH_ERRORS" })}
+      />
+    </PageContainer>
   );
 }
 
