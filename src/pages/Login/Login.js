@@ -14,8 +14,8 @@ import {
 import { logIn } from "../../firebase/authActions";
 
 function Login() {
-  const { dispatch, authState } = useContext(State);
-  const { loading } = authState;
+  const { dispatch, auth } = useContext(State);
+  const { loading } = auth;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -31,7 +31,7 @@ function Login() {
     logIn(email, password, dispatch);
   };
 
-  if (authState.isAuthenticated && authState.uid) {
+  if (auth.isAuthenticated && auth.uid) {
     return <Redirect to="/main" />;
   }
 
@@ -56,7 +56,7 @@ function Login() {
       </Form>
       <Link to="/register">Register</Link>
       <Snackbar
-        value={authState.error}
+        value={auth.error}
         type="error"
         onClose={() => dispatch({ type: "CLEAR_AUTH_ERRORS" })}
       />

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Component = styled.div`
   background-color: #ddd;
@@ -19,6 +20,7 @@ const Tab = styled.button`
 `;
 
 function MenuBar(props) {
+  console.log("Menubar props", props);
   return (
     <Component {...props}>
       <Tab>1</Tab>

@@ -16,7 +16,7 @@ const Login = lazy(() => import("./pages/Login"));
 export const State = createContext();
 
 function App() {
-  const [authState, dispatchAuth] = useAuthReducer();
+  const [auth, dispatchAuth] = useAuthReducer();
 
   const dispatch = action => [dispatchAuth].forEach(fn => fn(action));
 
@@ -26,13 +26,14 @@ function App() {
 
   return (
     <div className="App">
-      <State.Provider value={{ dispatch, authState }}>
+      <State.Provider value={{ dispatch, auth }}>
         <BrowserRouter>
           <Suspense fallback={<div>Fallback</div>}>
             <Switch>
               <Route exact path="/" component={AuthCheck} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
+              <Route path="/app" component={App} />
               <Route path="/main" component={MainPage} />
               <Route path="/new-expense" component={NewExpense} />
               <Route path="/reports" component={Reports} />

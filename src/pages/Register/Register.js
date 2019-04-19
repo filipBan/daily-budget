@@ -14,8 +14,8 @@ import {
 import { createUser } from "../../firebase/authActions";
 
 function Register() {
-  const { dispatch, authState } = useContext(State);
-  const { loading } = authState;
+  const { dispatch, auth } = useContext(State);
+  const { loading } = auth;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
@@ -32,7 +32,7 @@ function Register() {
     createUser(email, password, dispatch);
   };
 
-  if (authState.isAuthenticated && authState.uid) {
+  if (auth.isAuthenticated && auth.uid) {
     return <Redirect to="/main" />;
   }
 
@@ -64,7 +64,7 @@ function Register() {
       </Form>
       <Link to="/login">Login</Link>
       <Snackbar
-        value={authState.error}
+        value={auth.error}
         type="error"
         onClose={() => dispatch({ type: "CLEAR_AUTH_ERRORS" })}
       />

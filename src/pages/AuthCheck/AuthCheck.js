@@ -4,8 +4,8 @@ import { Redirect } from "react-router-dom";
 import { State } from "../../App";
 
 function AuthCheck() {
-  const { authState } = useContext(State);
-  const { loading, isAuthenticated } = authState;
+  const { auth } = useContext(State);
+  const { loading, isAuthenticated } = auth;
 
   if (loading) {
     return <div>Checking auth state...</div>;
