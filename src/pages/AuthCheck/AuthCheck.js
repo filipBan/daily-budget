@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
 
-function AuthCheck({ auth }) {
-  const { loading, isAuthenticated } = auth;
+import { State } from "../../App";
+
+function AuthCheck() {
+  const { authState } = useContext(State);
+  const { loading, isAuthenticated } = authState;
 
   if (loading) {
     return <div>Checking auth state...</div>;

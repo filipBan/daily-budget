@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
 
-import { Dispatch } from "../../App";
+import { State } from "../../App";
 
 import { logOut } from "../../firebase/authActions";
 
-function Main({ auth }) {
-  const { dispatch } = useContext(Dispatch);
+function Main() {
+  const { dispatch, authState } = useContext(State);
 
-  if (!auth.isAuthenticated) {
+  if (!authState.isAuthenticated || !authState.uid) {
     return <Redirect to="/" />;
   }
 

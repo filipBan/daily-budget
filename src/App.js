@@ -13,7 +13,7 @@ const Register = lazy(() => import("./pages/Register"));
 const Reports = lazy(() => import("./pages/Reports"));
 const Login = lazy(() => import("./pages/Login"));
 
-export const Dispatch = createContext();
+export const State = createContext();
 
 function App() {
   const [authState, dispatchAuth] = useAuthReducer();
@@ -26,24 +26,14 @@ function App() {
 
   return (
     <div className="App">
-      <Dispatch.Provider value={{ dispatch }}>
+      <State.Provider value={{ dispatch, authState }}>
         <BrowserRouter>
-          <Suspense fallback={<div>Hmmmmmm</div>}>
+          <Suspense fallback={<div>Fallback</div>}>
             <Switch>
-              <Route
-                exact
-                path="/"
-                render={props => <AuthCheck auth={authState} {...props} />}
-              />
-              <Route
-                path="/login"
-                render={props => <Login auth={authState} {...props} />}
-              />
+              <Route exact path="/" component={AuthCheck} />
+              <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
-              <Route
-                path="/main"
-                render={props => <MainPage auth={authState} {...props} />}
-              />
+              <Route path="/main" component={MainPage} />
               <Route path="/new-expense" component={NewExpense} />
               <Route path="/reports" component={Reports} />
               <Route path="/budget" component={Budget} />
@@ -51,7 +41,7 @@ function App() {
             </Switch>
           </Suspense>
         </BrowserRouter>
-      </Dispatch.Provider>
+      </State.Provider>
     </div>
   );
 }
