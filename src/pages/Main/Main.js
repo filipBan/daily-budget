@@ -9,29 +9,38 @@ import { State } from "../../App";
 import { logOut } from "../../firebase/authActions";
 
 const MainPage = styled.div`
+  margin: 1rem;
   display: grid;
-  height: 100%;
   width: 100%;
+  max-width: 600px;
   grid-template-columns: 2rem 1fr 2rem;
-  grid-template-rows: 5rem 1fr 1fr 1fr 2fr;
+  grid-template-rows: repeat(3, min-content);
   grid-row-gap: 1rem;
 `;
 
 const Yesterday = styled(Day)`
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 1;
 `;
 
 const Today = styled(Day)`
   grid-column: 2;
-  grid-row: 3;
+  grid-row: 2;
   justify-self: center;
 `;
 
 const Tomorrow = styled(Day)`
   grid-column: 2;
-  grid-row: 4;
+  grid-row: 3;
   justify-self: end;
+`;
+
+const AddNewContainer = styled.div`
+  width: 100%;
+  height: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const AddNew = styled.div`
@@ -39,19 +48,20 @@ const AddNew = styled.div`
   height: 6rem;
   background-color: #aaa;
   border-radius: 50%;
-  grid-column: 2;
-  grid-row: 5;
-  justify-self: center;
-  align-self: start;
+`;
+
+const MenuContainer = styled.div`
+  width: 100%;
+  height: 5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 const Menu = styled.div`
   width: 5rem;
   height: 5rem;
   background-color: #ddd;
-  justify-self: end;
-  grid-column: 2;
-  grid-row: 1;
 `;
 
 function Main() {
@@ -63,9 +73,11 @@ function Main() {
   }
 
   return (
-    <Container>
-      <MainPage>
+    <Container justify="space-between">
+      <MenuContainer>
         <Menu />
+      </MenuContainer>
+      <MainPage>
         <Yesterday
           active={active === "yesterday"}
           onClick={() => setActive("yesterday")}
@@ -81,8 +93,10 @@ function Main() {
         >
           +15
         </Tomorrow>
-        <AddNew />
       </MainPage>
+      <AddNewContainer>
+        <AddNew />
+      </AddNewContainer>
     </Container>
   );
 }

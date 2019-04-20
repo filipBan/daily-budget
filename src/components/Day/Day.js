@@ -6,17 +6,20 @@ const Pose = posed.div({
   active: {
     width: "100%",
     height: "25rem",
-    transition: { duration: 200 }
+    borderRadius: "20px",
+    transition: { type: "spring", stiffness: 200, damping: 20 }
   },
   inactive: {
     width: "12rem",
-    height: "12rem"
+    height: "12rem",
+    borderRadius: "100px",
+    transition: { type: "spring", stiffness: 200, damping: 20 }
   }
 });
 
 const Component = styled(Pose)`
   background-color: #aaa;
-  border-radius: 50%;
+
   align-self: center;
   display: flex;
   flex-direction: column;
