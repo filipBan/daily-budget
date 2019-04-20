@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import styled from "styled-components";
+import posed from "react-pose";
 
-import { Container, Day } from "../../components";
+import { NewExpense, Container, Day, DayContent } from "../../components";
 
 import { State } from "../../App";
-
-import { logOut } from "../../firebase/authActions";
 
 const MainPage = styled.div`
   margin: 1rem;
@@ -43,13 +42,6 @@ const AddNewContainer = styled.div`
   align-items: center;
 `;
 
-const AddNew = styled.div`
-  width: 6rem;
-  height: 6rem;
-  background-color: #aaa;
-  border-radius: 50%;
-`;
-
 const MenuContainer = styled.div`
   width: 100%;
   height: 5rem;
@@ -64,9 +56,18 @@ const Menu = styled.div`
   background-color: #ddd;
 `;
 
+const data = {
+  amount: "+15",
+  expensesTotal: "12",
+  expensesNumber: 6
+};
+
 function Main() {
   const { dispatch, auth } = useContext(State);
   const [active, setActive] = useState("today");
+  const [modal, setModal] = useState(false);
+
+  const toggleModal = () => setModal(!modal);
 
   if (!auth.isAuthenticated || !auth.uid) {
     return <Redirect to="/" />;
@@ -82,20 +83,28 @@ function Main() {
           active={active === "yesterday"}
           onClick={() => setActive("yesterday")}
         >
-          +10
+          <DayContent
+            active={active === "yesterday"}
+            data={data}
+            day="Yesterday"
+          />
         </Yesterday>
         <Today active={active === "today"} onClick={() => setActive("today")}>
-          +15
+          <DayContent active={active === "today"} data={data} day="Today" />
         </Today>
         <Tomorrow
           active={active === "tomorrow"}
           onClick={() => setActive("tomorrow")}
         >
-          +15
+          <DayContent
+            active={active === "tomorrow"}
+            data={data}
+            day="Tomorrow"
+          />
         </Tomorrow>
       </MainPage>
       <AddNewContainer>
-        <AddNew />
+        <NewExpense />
       </AddNewContainer>
     </Container>
   );

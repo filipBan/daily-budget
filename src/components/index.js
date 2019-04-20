@@ -6,3 +6,5 @@ export { default as Snackbar } from "./Snackbar";
 export { default as Spinner } from "./Spinner";
 export { default as MenuBar } from "./MenuBar";
 export { default as Day } from "./Day";
+export { default as DayContent } from "./DayContent";
+export { default as NewExpense } from "./NewExpense";

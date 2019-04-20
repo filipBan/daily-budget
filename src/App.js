@@ -7,7 +7,6 @@ import { checkLoginStatus } from "./firebase/authActions";
 const AuthCheck = lazy(() => import("./pages/AuthCheck"));
 const MainPage = lazy(() => import("./pages/Main"));
 const Budget = lazy(() => import("./pages/Budget"));
-const NewExpense = lazy(() => import("./pages/NewExpense"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Register = lazy(() => import("./pages/Register"));
 const Reports = lazy(() => import("./pages/Reports"));
@@ -35,7 +34,6 @@ function App() {
               <Route path="/register" component={Register} />
               <Route path="/app" component={App} />
               <Route path="/main" component={MainPage} />
-              <Route path="/new-expense" component={NewExpense} />
               <Route path="/reports" component={Reports} />
               <Route path="/budget" component={Budget} />
               <Route path="/profile" component={Profile} />
