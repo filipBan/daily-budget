@@ -9,6 +9,9 @@ const Component = styled.div`
   justify-content: ${props => (props.justify ? props.justify : "center")};
   align-items: center;
   position: relative;
+  /* background-image: ${props => (props.page ? "url(/bg_img.svg)" : "none")};
+  background-repeat: no-repeat; */
+
 `;
 
 function Container(props) {

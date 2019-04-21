@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import posed, { PoseGroup } from "react-pose";
+import posed from "react-pose";
 
 import Content from "./Content";
 
-const ModalPose = posed.div({
+const pose = posed.div({
   visible: {
     opacity: 1,
-    height: "500px",
+    height: "400px",
     width: window.innerWidth - 40,
     x: -(window.innerWidth - 40) / 2 + 30,
-    y: -500,
+    y: -400,
     borderRadius: "20px",
     backgroundColor: "#ede7f6",
     transition: { type: "spring", stiffness: 200, damping: 17 }
@@ -27,7 +27,7 @@ const ModalPose = posed.div({
   }
 });
 
-const Box = styled(ModalPose)`
+const Component = styled(pose)`
   position: absolute;
 `;
 
@@ -61,7 +61,7 @@ const Button = styled(ButtonPose)`
 `;
 
 function AddModal(props) {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   return (
     <div>
       <Button
@@ -90,9 +90,13 @@ function AddModal(props) {
           />
         </svg>
       </Button>
-      <Box visible={visible} key="box" pose={visible ? "visible" : "hidden"}>
+      <Component
+        visible={visible}
+        key="box"
+        pose={visible ? "visible" : "hidden"}
+      >
         {visible ? <Content close={() => setVisible(false)} /> : null}
-      </Box>
+      </Component>
     </div>
   );
 }

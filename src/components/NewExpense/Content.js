@@ -1,9 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import posed from "react-pose";
-import { Select } from "grommet";
+import { Select, TextInput } from "grommet";
+import Form from "../Form";
+import Button from "../Button";
+import { State } from "../../App";
 
-const categories = [];
+import { addExpense } from "../../firebase/databseActions";
+
+const categories = [
+  "eating out",
+  "work",
+  "books",
+  "courses",
+  "games",
+  "groceries",
+  "bill",
+  "entertainment",
+  "other"
+];
 
 const Component = styled.div`
   width: 100%;
@@ -13,9 +28,17 @@ const Component = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+`;
 
-  svg {
-  }
+const Error = styled.span`
+  color: red;
+`;
+
+const Actions = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
 `;
 
 const IconPose = posed.button({
@@ -30,6 +53,9 @@ const Icon = styled(IconPose)`
   right: 1rem;
   width: 34px;
   height: 34px;
+  border: none;
+  outline: none;
+  background: none;
 `;
 
 function CloseIcon(props) {
@@ -60,14 +86,64 @@ function CloseIcon(props) {
 }
 
 function Content({ close }) {
-  const [select, setSelect] = useState("");
+  const { auth } = useContext(State);
+  const [category, setCategory] = useState("");
+  const [amount, setAmount] = useState("");
+  const [name, setName] = useState("");
+  const { error, loading, saveExpense } = addExpense();
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    saveExpense({
+      name,
+      amount,
+      category,
+      uid: auth.uid
+    });
+  };
+
   return (
     <Component>
-      {/* <Select
-        options={["small", "medium", "large"]}
-        value={select}
-        onChange={({ option }) => setSelect(option)}
-      /> */}
+      <Form justify="space-around" onSubmit={handleSubmit}>
+        <TextInput
+          placeholder="Name"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          required
+        />
+        <TextInput
+          placeholder="Amount"
+          type="number"
+          value={amount}
+          onChange={e => setAmount(e.target.value)}
+          required
+        />
+        <Select
+          dropAlign={{
+            top: "top"
+          }}
+          dropHeight="small"
+          placeholder="Category"
+          options={categories}
+          value={category}
+          onChange={({ option }) => setCategory(option)}
+        />
+        <Actions>
+          <Button
+            type="button"
+            secondary
+            onClick={() => close()}
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" primary disabled={loading}>
+            Save
+          </Button>
+        </Actions>
+      </Form>
+      {error ? <Error>{error}</Error> : null}
       <CloseIcon onClick={() => close()} />
     </Component>
   );

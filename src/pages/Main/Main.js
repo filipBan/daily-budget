@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
 import styled from "styled-components";
-import posed from "react-pose";
 
 import { NewExpense, Container, Day, DayContent } from "../../components";
 
 import { State } from "../../App";
+
+import { getRecordsTodayYesterday } from "../../firebase/databseActions";
 
 const MainPage = styled.div`
   margin: 1rem;
@@ -56,25 +57,24 @@ const Menu = styled.div`
   background-color: #ddd;
 `;
 
-const data = {
-  amount: "+15",
-  expensesTotal: "12",
-  expensesNumber: 6
-};
-
 function Main() {
   const { dispatch, auth } = useContext(State);
   const [active, setActive] = useState("today");
-  const [modal, setModal] = useState(false);
+  const { data, error, loading, getRecords } = getRecordsTodayYesterday();
 
-  const toggleModal = () => setModal(!modal);
+  console.log({ data });
 
   if (!auth.isAuthenticated || !auth.uid) {
     return <Redirect to="/" />;
   }
 
+  useEffect(() => {
+    console.log("About to get records");
+    getRecords(auth.uid);
+  }, []);
+
   return (
-    <Container justify="space-between">
+    <Container justify="space-between" page>
       <MenuContainer>
         <Menu />
       </MenuContainer>
@@ -85,22 +85,22 @@ function Main() {
         >
           <DayContent
             active={active === "yesterday"}
-            data={data}
+            data={data.yesterday || []}
             day="Yesterday"
           />
         </Yesterday>
         <Today active={active === "today"} onClick={() => setActive("today")}>
-          <DayContent active={active === "today"} data={data} day="Today" />
+          <DayContent
+            active={active === "today"}
+            data={data.today || []}
+            day="Today"
+          />
         </Today>
         <Tomorrow
           active={active === "tomorrow"}
           onClick={() => setActive("tomorrow")}
         >
-          <DayContent
-            active={active === "tomorrow"}
-            data={data}
-            day="Tomorrow"
-          />
+          <DayContent active={active === "tomorrow"} data={[]} day="Tomorrow" />
         </Tomorrow>
       </MainPage>
       <AddNewContainer>

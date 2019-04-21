@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import posed, { PoseGroup } from "react-pose";
 
 import { Container } from "../../components";
@@ -25,6 +24,7 @@ const DayTitle = posed.span({
 });
 
 function DayContent({ active, data, day }) {
+  console.log({ day, data });
   return (
     <Container>
       <DayTitle pose={active ? "active" : "inactive"}>{day}</DayTitle>

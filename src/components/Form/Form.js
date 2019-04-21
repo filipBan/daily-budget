@@ -2,13 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 const Component = styled.form`
-  width: 30rem;
+  width: 26rem;
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: ${props => props.justify || "center"};
   align-items: center;
-  background-color: #ddd;
   min-height: 25rem;
 `;
 
