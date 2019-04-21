@@ -3,13 +3,13 @@ import styled from "styled-components";
 
 const Component = styled.input`
   width: 20rem;
-  height: 3rem;
+  height: 4rem;
   margin: 1rem;
   padding: 1rem;
-  border-radius: 3px;
-  border: 1px solid #ddd;
-  text-align: center;
-  font-size: 1.5rem;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+  /* text-align: center; */
+  font-size: 1.6rem;
 `;
 
 function Input(props) {

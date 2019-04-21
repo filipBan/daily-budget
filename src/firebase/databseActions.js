@@ -1,7 +1,7 @@
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 
 import { getTime, startOfToday, startOfYesterday } from "date-fns";
-import uuid from "uuid";
+
 import firebase from "./firebaseConfig";
 
 export const FETCH_INIT = "FETCH_INIT";
@@ -27,7 +27,7 @@ const dataFetchReducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        error: true
+        error: action.error
       };
     default:
       throw new Error();
@@ -44,7 +44,6 @@ export function addExpense() {
     try {
       const newRecord = {
         ...expense,
-        id: uuid.v4(),
         date: getTime(startOfToday())
       };
 
@@ -57,7 +56,8 @@ export function addExpense() {
 
       dispatch({ type: FETCH_SUCCESS });
     } catch (error) {
-      dispatch({ type: FETCH_FAILURE });
+      console.error(error);
+      dispatch({ type: FETCH_FAILURE, error: error.message });
     }
   };
 
@@ -101,7 +101,7 @@ export function getRecordsTodayYesterday() {
       dispatch({ type: FETCH_SUCCESS, payload: allRecords });
     } catch (error) {
       console.error({ error });
-      dispatch({ type: FETCH_FAILURE });
+      dispatch({ type: FETCH_FAILURE, error: error.message });
     }
   };
 

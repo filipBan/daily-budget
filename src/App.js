@@ -1,6 +1,9 @@
 import React, { createContext, lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
+import { ThemeProvider } from "styled-components";
+
+import theme from "./theme";
 import { useAuthReducer } from "./reducers";
 import { checkLoginStatus } from "./firebase/authActions";
 
@@ -25,22 +28,24 @@ function App() {
 
   return (
     <div className="App">
-      <State.Provider value={{ dispatch, auth }}>
-        <BrowserRouter>
-          <Suspense fallback={<div>Fallback</div>}>
-            <Switch>
-              <Route exact path="/" component={AuthCheck} />
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
-              <Route path="/app" component={App} />
-              <Route path="/main" component={MainPage} />
-              <Route path="/reports" component={Reports} />
-              <Route path="/budget" component={Budget} />
-              <Route path="/profile" component={Profile} />
-            </Switch>
-          </Suspense>
-        </BrowserRouter>
-      </State.Provider>
+      <ThemeProvider theme={theme}>
+        <State.Provider value={{ dispatch, auth }}>
+          <BrowserRouter>
+            <Suspense fallback={<div>Fallback</div>}>
+              <Switch>
+                <Route exact path="/" component={AuthCheck} />
+                <Route path="/login" component={Login} />
+                <Route path="/register" component={Register} />
+                <Route path="/app" component={App} />
+                <Route path="/main" component={MainPage} />
+                <Route path="/reports" component={Reports} />
+                <Route path="/budget" component={Budget} />
+                <Route path="/profile" component={Profile} />
+              </Switch>
+            </Suspense>
+          </BrowserRouter>
+        </State.Provider>
+      </ThemeProvider>
     </div>
   );
 }

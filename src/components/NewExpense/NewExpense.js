@@ -13,7 +13,7 @@ const pose = posed.div({
     y: -400,
     borderRadius: "20px",
     backgroundColor: "#ede7f6",
-    transition: { type: "spring", stiffness: 200, damping: 17 }
+    transition: { type: "spring", stiffness: 200, damping: 18 }
   },
   hidden: {
     opacity: 0,
@@ -29,6 +29,7 @@ const pose = posed.div({
 
 const Component = styled(pose)`
   position: absolute;
+  border: 2px solid #673ab7;
 `;
 
 const ButtonPose = posed.button({

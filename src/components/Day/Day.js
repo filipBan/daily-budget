@@ -1,23 +1,43 @@
 import React from "react";
-import posed from "react-pose";
+import posed, { PoseGroup } from "react-pose";
 import styled from "styled-components";
 
-const Pose = posed.div({
+const ComponentPose = posed.div({
   active: {
     width: "25rem",
     height: "25rem",
-    borderRadius: "20px",
-    transition: { type: "spring", stiffness: 200, damping: 20 }
+    borderRadius: "50px",
+    transition: { type: "spring", stiffness: 200, damping: 17 }
   },
   inactive: {
     width: "12rem",
     height: "12rem",
     borderRadius: "100px",
-    transition: { type: "spring", stiffness: 200, damping: 20 }
+    transition: { type: "spring", stiffness: 200, damping: 17 }
   }
 });
 
-const Component = styled(Pose)`
+const Details = posed.div({
+  enter: {
+    opacity: 1,
+    transition: { duration: 200 }
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 10 }
+  }
+});
+
+const DayTitle = posed.span({
+  active: {
+    fontSize: "2.4rem"
+  },
+  inactive: {
+    fontSize: "1.6rem"
+  }
+});
+
+const Component = styled(ComponentPose)`
   border: 2px solid #311b92;
   align-self: center;
   display: flex;
@@ -28,10 +48,21 @@ const Component = styled(Pose)`
   font-family: "Roboto", sans-serif;
 `;
 
-function Day({ active, children, ...rest }) {
+function Day({ active, day, data, ...rest }) {
   return (
     <Component pose={active ? "active" : "inactive"} {...rest}>
-      {children}
+      <DayTitle pose={active ? "active" : "inactive"}>{day}</DayTitle>
+      <span id="amount">{data.amount}</span>
+      <PoseGroup>
+        {active && [
+          <Details key="expTotal" id="expTotal">
+            {data.expensesTotal}
+          </Details>,
+          <Details key="expNumber" id="expNumber">
+            {data.expensesNumber}
+          </Details>
+        ]}
+      </PoseGroup>
     </Component>
   );
 }

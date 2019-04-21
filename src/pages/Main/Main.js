@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 
-import { NewExpense, Container, Day, DayContent } from "../../components";
+import { NewExpense, Container, Day } from "../../components";
 
 import { State } from "../../App";
 
@@ -58,18 +58,15 @@ const Menu = styled.div`
 `;
 
 function Main() {
-  const { dispatch, auth } = useContext(State);
+  const { auth } = useContext(State);
   const [active, setActive] = useState("today");
-  const { data, error, loading, getRecords } = getRecordsTodayYesterday();
-
-  console.log({ data });
+  const { data, error, getRecords } = getRecordsTodayYesterday();
 
   if (!auth.isAuthenticated || !auth.uid) {
     return <Redirect to="/" />;
   }
 
   useEffect(() => {
-    console.log("About to get records");
     getRecords(auth.uid);
   }, []);
 
@@ -82,26 +79,22 @@ function Main() {
         <Yesterday
           active={active === "yesterday"}
           onClick={() => setActive("yesterday")}
-        >
-          <DayContent
-            active={active === "yesterday"}
-            data={data.yesterday || []}
-            day="Yesterday"
-          />
-        </Yesterday>
-        <Today active={active === "today"} onClick={() => setActive("today")}>
-          <DayContent
-            active={active === "today"}
-            data={data.today || []}
-            day="Today"
-          />
-        </Today>
+          data={data.yesterday || []}
+          day="Yesterday"
+        />
+        <Today
+          active={active === "today"}
+          onClick={() => setActive("today")}
+          data={data.today || []}
+          day="Today"
+        />
+
         <Tomorrow
           active={active === "tomorrow"}
           onClick={() => setActive("tomorrow")}
-        >
-          <DayContent active={active === "tomorrow"} data={[]} day="Tomorrow" />
-        </Tomorrow>
+          data={[]}
+          day="Tomorrow"
+        />
       </MainPage>
       <AddNewContainer>
         <NewExpense />

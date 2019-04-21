@@ -6,7 +6,7 @@ function getBorder(props) {
   if (props.disabled) {
     return "2px solid #ddd";
   } else if (props.primary || props.secondary) {
-    return "2px solid #7e57c2";
+    return `2px solid ${props.theme.primary}`;
   }
 
   return "none";
@@ -16,7 +16,9 @@ function getBackground(props) {
   if (props.disabled) {
     return "#ddd";
   } else if (props.primary) {
-    return "#7e57c2";
+    return props.theme.primary;
+  } else if (props.secondary) {
+    return "white";
   }
   return "rgba(0,0,0,0)";
 }

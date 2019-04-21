@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import posed from "react-pose";
-import { Select, TextInput } from "grommet";
+
 import Form from "../Form";
 import Button from "../Button";
+import Input from "../Input";
+import Select from "../Select";
 import { State } from "../../App";
 
 import { addExpense } from "../../firebase/databseActions";
@@ -87,32 +89,34 @@ function CloseIcon(props) {
 
 function Content({ close }) {
   const { auth } = useContext(State);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(categories[0]);
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("");
   const { error, loading, saveExpense } = addExpense();
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
-    saveExpense({
+    await saveExpense({
       name,
       amount,
       category,
       uid: auth.uid
     });
+
+    close();
   };
 
   return (
     <Component>
       <Form justify="space-around" onSubmit={handleSubmit}>
-        <TextInput
+        <Input
           placeholder="Name"
           value={name}
           onChange={e => setName(e.target.value)}
           required
         />
-        <TextInput
+        <Input
           placeholder="Amount"
           type="number"
           value={amount}
@@ -120,14 +124,10 @@ function Content({ close }) {
           required
         />
         <Select
-          dropAlign={{
-            top: "top"
-          }}
-          dropHeight="small"
           placeholder="Category"
           options={categories}
           value={category}
-          onChange={({ option }) => setCategory(option)}
+          onChange={e => setCategory(e.target.value)}
         />
         <Actions>
           <Button
