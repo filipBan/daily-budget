@@ -29,7 +29,7 @@ const pose = posed.div({
 
 const Component = styled(pose)`
   position: absolute;
-  border: 2px solid #673ab7;
+  filter: drop-shadow(0px 0px 2px #311b92);
 `;
 
 const ButtonPose = posed.button({
@@ -61,7 +61,7 @@ const Button = styled(ButtonPose)`
   }
 `;
 
-function AddModal(props) {
+function AddModal({ addExpError, loading, saveExpense }) {
   const [visible, setVisible] = useState(false);
   return (
     <div>
@@ -96,7 +96,14 @@ function AddModal(props) {
         key="box"
         pose={visible ? "visible" : "hidden"}
       >
-        {visible ? <Content close={() => setVisible(false)} /> : null}
+        {visible ? (
+          <Content
+            addExpError={addExpError}
+            loading={loading}
+            saveExpense={saveExpense}
+            close={() => setVisible(false)}
+          />
+        ) : null}
       </Component>
     </div>
   );

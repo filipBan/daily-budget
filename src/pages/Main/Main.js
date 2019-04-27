@@ -1,12 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import styled from "styled-components";
+import { getTime, startOfToday, startOfYesterday } from "date-fns";
 
 import { NewExpense, Container, Day } from "../../components";
 
 import { State } from "../../App";
 
-import { getRecordsTodayYesterday } from "../../firebase/databseActions";
+import {
+  addExpense,
+  getRecordsTodayYesterday
+} from "../../firebase/databseActions";
 
 const MainPage = styled.div`
   margin: 1rem;
@@ -58,16 +62,32 @@ const Menu = styled.div`
 `;
 
 function Main() {
-  const { auth } = useContext(State);
-  const [active, setActive] = useState("today");
-  const { data, error, getRecords } = getRecordsTodayYesterday();
+  const { dispatch, auth, records } = useContext(State);
 
   if (!auth.isAuthenticated || !auth.uid) {
     return <Redirect to="/" />;
   }
 
+  const [active, setActive] = useState("today");
+  const { error: addExpError, loading, saveExpense } = addExpense();
+  const { error, getRecords } = getRecordsTodayYesterday();
+
+  const saveNewExpense = async props => {
+    await saveExpense(props);
+    dispatch({ type: "ADD_EXPENSE", data: props, id: props.id });
+  };
+
+  const yesterday = getTime(startOfYesterday());
+  const today = getTime(startOfToday());
+
   useEffect(() => {
-    getRecords(auth.uid);
+    const fetchRecords = async () => {
+      const result = await getRecords(auth.uid);
+
+      dispatch({ type: "FETCH_RECORDS", payload: result });
+    };
+
+    fetchRecords();
   }, []);
 
   return (
@@ -79,13 +99,13 @@ function Main() {
         <Yesterday
           active={active === "yesterday"}
           onClick={() => setActive("yesterday")}
-          data={data.yesterday || []}
+          data={records[yesterday] || []}
           day="Yesterday"
         />
         <Today
           active={active === "today"}
           onClick={() => setActive("today")}
-          data={data.today || []}
+          data={records[today] || []}
           day="Today"
         />
 
@@ -97,7 +117,11 @@ function Main() {
         />
       </MainPage>
       <AddNewContainer>
-        <NewExpense />
+        <NewExpense
+          addExpError={addExpError}
+          loading={loading}
+          saveExpense={saveNewExpense}
+        />
       </AddNewContainer>
     </Container>
   );

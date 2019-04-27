@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
 import theme from "./theme";
-import { useAuthReducer } from "./reducers";
+import { useAuthReducer, useRecordsReducer } from "./reducers";
 import { checkLoginStatus } from "./firebase/authActions";
 
 const AuthCheck = lazy(() => import("./pages/AuthCheck"));
@@ -19,8 +19,10 @@ export const State = createContext();
 
 function App() {
   const [auth, dispatchAuth] = useAuthReducer();
+  const [records, dispatchRecords] = useRecordsReducer();
 
-  const dispatch = action => [dispatchAuth].forEach(fn => fn(action));
+  const dispatch = action =>
+    [dispatchAuth, dispatchRecords].forEach(fn => fn(action));
 
   useEffect(() => {
     checkLoginStatus(dispatch);
@@ -29,7 +31,7 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <State.Provider value={{ dispatch, auth }}>
+        <State.Provider value={{ dispatch, auth, records }}>
           <BrowserRouter>
             <Suspense fallback={<div>Fallback</div>}>
               <Switch>

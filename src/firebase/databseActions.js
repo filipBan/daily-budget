@@ -21,7 +21,7 @@ const dataFetchReducer = (state, action) => {
         ...state,
         loading: false,
         error: false,
-        data: action.payload
+        payload: action.payload
       };
     case FETCH_FAILURE:
       return {
@@ -68,7 +68,7 @@ export function getRecordsTodayYesterday() {
   const [state, dispatch] = useReducer(dataFetchReducer, {
     loading: false,
     loading: false,
-    data: {}
+    payload: {}
   });
 
   const getRecords = async uid => {
@@ -82,16 +82,18 @@ export function getRecordsTodayYesterday() {
         .where("date", ">=", getTime(startOfYesterday()))
         .get()
         .then(snapshot => {
+          const yesterday = getTime(startOfYesterday());
+          const today = getTime(startOfToday());
           const results = {
-            yesterday: [],
-            today: []
+            [yesterday]: [],
+            [today]: []
           };
           snapshot.forEach(doc => {
             const record = doc.data();
             if (record.date === getTime(startOfYesterday())) {
-              results.yesterday.push(record);
+              results[yesterday].push(record);
             } else if (record.date === getTime(startOfToday())) {
-              results.today.push(record);
+              results[today].push(record);
             }
           });
 
@@ -99,6 +101,8 @@ export function getRecordsTodayYesterday() {
         });
 
       dispatch({ type: FETCH_SUCCESS, payload: allRecords });
+
+      return allRecords;
     } catch (error) {
       console.error({ error });
       dispatch({ type: FETCH_FAILURE, error: error.message });

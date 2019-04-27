@@ -87,19 +87,18 @@ function CloseIcon(props) {
   );
 }
 
-function Content({ close }) {
+function Content({ close, addExpError, loading, saveExpense }) {
   const { auth } = useContext(State);
   const [category, setCategory] = useState(categories[0]);
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("");
-  const { error, loading, saveExpense } = addExpense();
 
   const handleSubmit = async e => {
     e.preventDefault();
 
     await saveExpense({
       name,
-      amount,
+      amount: parseFloat(amount),
       category,
       uid: auth.uid
     });
@@ -143,7 +142,7 @@ function Content({ close }) {
           </Button>
         </Actions>
       </Form>
-      {error ? <Error>{error}</Error> : null}
+      {addExpError ? <Error>{addExpError}</Error> : null}
       <CloseIcon onClick={() => close()} />
     </Component>
   );

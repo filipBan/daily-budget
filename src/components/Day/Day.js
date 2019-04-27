@@ -7,12 +7,14 @@ const ComponentPose = posed.div({
     width: "25rem",
     height: "25rem",
     borderRadius: "50px",
+    backgroundColor: "#ede7f6",
     transition: { type: "spring", stiffness: 200, damping: 17 }
   },
   inactive: {
     width: "12rem",
     height: "12rem",
     borderRadius: "100px",
+    backgroundColor: "#9575cd",
     transition: { type: "spring", stiffness: 200, damping: 17 }
   }
 });
@@ -38,7 +40,8 @@ const DayTitle = posed.span({
 });
 
 const Component = styled(ComponentPose)`
-  border: 2px solid #311b92;
+  /* border: 2px solid #311b92; */
+
   align-self: center;
   display: flex;
   flex-direction: column;
@@ -49,20 +52,20 @@ const Component = styled(ComponentPose)`
 `;
 
 function Day({ active, day, data, ...rest }) {
+  console.log("Day data: ", day, { data });
+
   return (
     <Component pose={active ? "active" : "inactive"} {...rest}>
       <DayTitle pose={active ? "active" : "inactive"}>{day}</DayTitle>
-      <span id="amount">{data.amount}</span>
-      <PoseGroup>
-        {active && [
-          <Details key="expTotal" id="expTotal">
-            {data.expensesTotal}
-          </Details>,
-          <Details key="expNumber" id="expNumber">
-            {data.expensesNumber}
-          </Details>
-        ]}
-      </PoseGroup>
+
+      <Details key="expTotal" id="expTotal">
+        {data.reduce((a, b) => a + b.amount, 0)}
+      </Details>
+      {active ? (
+        <Details key="expNumber" id="expNumber">
+          {data.expensesNumber}
+        </Details>
+      ) : null}
     </Component>
   );
 }
