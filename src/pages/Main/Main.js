@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 import { getTime, startOfToday, startOfYesterday } from "date-fns";
 
-import { NewExpense, Container, Day } from "../../components";
+import { NewExpense, Container, Day, Menu, Burger } from "../../components";
 
 import { State } from "../../App";
 
@@ -22,23 +22,6 @@ const MainPage = styled.div`
   grid-row-gap: 1rem;
 `;
 
-const Yesterday = styled(Day)`
-  grid-column: 2;
-  grid-row: 1;
-`;
-
-const Today = styled(Day)`
-  grid-column: 2;
-  grid-row: 2;
-  justify-self: center;
-`;
-
-const Tomorrow = styled(Day)`
-  grid-column: 2;
-  grid-row: 3;
-  justify-self: end;
-`;
-
 const AddNewContainer = styled.div`
   width: 100%;
   height: 10rem;
@@ -49,16 +32,11 @@ const AddNewContainer = styled.div`
 
 const MenuContainer = styled.div`
   width: 100%;
-  height: 5rem;
+  height: 8rem;
+  padding: 0 1rem;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-`;
-
-const Menu = styled.div`
-  width: 5rem;
-  height: 5rem;
-  background-color: #ddd;
 `;
 
 function Main() {
@@ -68,7 +46,8 @@ function Main() {
     return <Redirect to="/" />;
   }
 
-  const [active, setActive] = useState("today");
+  const [active, setActive] = useState("Today");
+  const [menuVisible, setMenuVisible] = useState(false);
   const { error: addExpError, loading, saveExpense } = addExpense();
   const { error, getRecords } = getRecordsTodayYesterday();
 
@@ -76,6 +55,8 @@ function Main() {
     await saveExpense(props);
     dispatch({ type: "ADD_EXPENSE", data: props, id: props.id });
   };
+
+  const toggleMenu = () => setMenuVisible(v => !v);
 
   const yesterday = getTime(startOfYesterday());
   const today = getTime(startOfToday());
@@ -93,26 +74,25 @@ function Main() {
   return (
     <Container justify="space-between" page>
       <MenuContainer>
-        <Menu />
+        <Burger toggleMenu={toggleMenu} menuVisible={menuVisible} />
       </MenuContainer>
+      <Menu isVisible={menuVisible} />
       <MainPage>
-        <Yesterday
-          active={active === "yesterday"}
-          onClick={() => setActive("yesterday")}
+        <Day
+          active={active === "Yesterday"}
+          handleClick={setActive}
           data={records[yesterday] || []}
           day="Yesterday"
         />
-        <Today
-          active={active === "today"}
-          onClick={() => setActive("today")}
+        <Day
+          active={active === "Today"}
+          handleClick={setActive}
           data={records[today] || []}
           day="Today"
         />
-
-        <Tomorrow
-          active={active === "tomorrow"}
-          onClick={() => setActive("tomorrow")}
-          data={[]}
+        <Day
+          active={active === "Tomorrow"}
+          handleClick={setActive}
           day="Tomorrow"
         />
       </MainPage>
@@ -127,4 +107,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default React.memo(Main);

@@ -1,5 +1,5 @@
 import React from "react";
-import posed, { PoseGroup } from "react-pose";
+import posed from "react-pose";
 import styled from "styled-components";
 
 const ComponentPose = posed.div({
@@ -39,9 +39,20 @@ const DayTitle = posed.span({
   }
 });
 
-const Component = styled(ComponentPose)`
-  /* border: 2px solid #311b92; */
+function getGridPosition(day) {
+  switch (day) {
+    case "Yesterday":
+      return "grid-column: 2;grid-row: 1;";
+    case "Today":
+      return "grid-column: 2;grid-row: 2;justify-self: center;";
+    case "Tomorrow":
+      return "grid-column: 2;grid-row: 3;justify-self: end;";
+    default:
+      return "font-size: 10rem;";
+  }
+}
 
+const Component = styled(ComponentPose)`
   align-self: center;
   display: flex;
   flex-direction: column;
@@ -49,25 +60,29 @@ const Component = styled(ComponentPose)`
   align-items: center;
   font-size: 3rem;
   font-family: "Roboto", sans-serif;
+  ${props => getGridPosition(props.day)};
 `;
 
-function Day({ active, day, data, ...rest }) {
-  console.log("Day data: ", day, { data });
-
+function Day({ active, day, data = [], handleClick, ...rest }) {
   return (
-    <Component pose={active ? "active" : "inactive"} {...rest}>
+    <Component
+      pose={active ? "active" : "inactive"}
+      onClick={() => handleClick(day)}
+      day={day}
+      {...rest}
+    >
       <DayTitle pose={active ? "active" : "inactive"}>{day}</DayTitle>
 
       <Details key="expTotal" id="expTotal">
         {data.reduce((a, b) => a + b.amount, 0)}
       </Details>
-      {active ? (
+      {active && (
         <Details key="expNumber" id="expNumber">
           {data.expensesNumber}
         </Details>
-      ) : null}
+      )}
     </Component>
   );
 }
 
-export default Day;
+export default React.memo(Day);

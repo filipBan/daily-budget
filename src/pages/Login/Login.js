@@ -52,7 +52,9 @@ function Login() {
           required
           onChange={e => setPassword(e.target.value)}
         />
-        <Button disabled={loading}>{loading ? <Spinner /> : "Log in"}</Button>
+        <Button primary disabled={loading}>
+          {loading ? <Spinner /> : "Log in"}
+        </Button>
       </Form>
       <Link to="/register">Register</Link>
       <Snackbar
