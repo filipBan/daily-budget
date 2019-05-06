@@ -7,6 +7,8 @@ import theme from "./theme";
 import { useAuthReducer, useRecordsReducer } from "./reducers";
 import { checkLoginStatus } from "./firebase/authActions";
 
+import { MenuBar } from "./components";
+
 const AuthCheck = lazy(() => import("./pages/AuthCheck"));
 const MainPage = lazy(() => import("./pages/Main"));
 const Budget = lazy(() => import("./pages/Budget"));
@@ -33,6 +35,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <State.Provider value={{ dispatch, auth, records }}>
           <BrowserRouter>
+            <MenuBar />
             <Suspense fallback={<div>Fallback</div>}>
               <Switch>
                 <Route exact path="/" component={AuthCheck} />

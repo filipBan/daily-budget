@@ -1,32 +1,38 @@
-import React from "react";
+import React, { Fragment, useState, useCallback } from "react";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
+import Burger from "../Burger";
+import Menu from "../Menu";
 
-const Component = styled.div`
-  background-color: #ddd;
-  height: 6rem;
+const MenuContainer = styled.div`
   width: 100%;
-`;
-
-const Tab = styled.button`
   height: 6rem;
-  width: calc(100% / 3);
-  outline: none;
-  border: none;
-
-  &:active {
-    background-color: #aaa;
-  }
+  padding: 0 1rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
-function MenuBar(props) {
-  console.log("Menubar props", props);
+function MenuBar({ dispatch, location, ...rest }) {
+  if (
+    location.pathname === "/" ||
+    location.pathname === "/login" ||
+    location.pathname === "/register"
+  ) {
+    return null;
+  }
+
+  const [menuVisible, setMenuVisible] = useState(false);
+  const toggleMenu = useCallback(() => setMenuVisible(v => !v), []);
+
   return (
-    <Component {...props}>
-      <Tab>1</Tab>
-      <Tab>2</Tab>
-      <Tab>3</Tab>
-    </Component>
+    <Fragment>
+      <MenuContainer {...rest}>
+        <Burger toggleMenu={toggleMenu} menuVisible={menuVisible} />
+      </MenuContainer>
+      <Menu isVisible={menuVisible} dispatch={dispatch} close={toggleMenu} />
+    </Fragment>
   );
 }
 
-export default MenuBar;
+export default React.memo(withRouter(MenuBar));

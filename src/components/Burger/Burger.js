@@ -32,7 +32,7 @@ function Burger({ menuVisible, toggleMenu }) {
       .to(".line-two", 0.125, { scaleX: 0, opacity: 0 }, "toggle")
       .to(
         ".line-one",
-        0.25,
+        0.2,
         {
           rotation: 45,
           stroke: "#fff",
@@ -43,7 +43,7 @@ function Burger({ menuVisible, toggleMenu }) {
       )
       .to(
         ".line-three",
-        0.25,
+        0.2,
         {
           rotation: -45,
           stroke: "#fff",
@@ -54,7 +54,7 @@ function Burger({ menuVisible, toggleMenu }) {
       )
       .to(
         ".hamburger",
-        0.5,
+        0.35,
         { rotation: 90, ease: "Power1.easeInOut" },
         "cross"
       );
@@ -123,4 +123,4 @@ function Burger({ menuVisible, toggleMenu }) {
   );
 }
 
-export default Burger;
+export default React.memo(Burger);

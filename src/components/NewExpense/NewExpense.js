@@ -63,6 +63,7 @@ const Button = styled(ButtonPose)`
 
 function AddModal({ addExpError, loading, saveExpense }) {
   const [visible, setVisible] = useState(false);
+
   return (
     <div>
       <Button
@@ -109,4 +110,4 @@ function AddModal({ addExpError, loading, saveExpense }) {
   );
 }
 
-export default AddModal;
+export default React.memo(AddModal);

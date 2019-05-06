@@ -9,3 +9,4 @@ export { default as Day } from "./Day";
 export { default as NewExpense } from "./NewExpense";
 export { default as Select } from "./Select";
 export { default as Burger } from "./Burger";
+export { default as MenuBar } from "./MenuBar";

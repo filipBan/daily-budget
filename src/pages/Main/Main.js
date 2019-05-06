@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useCallback, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 import { getTime, startOfToday, startOfYesterday } from "date-fns";
 
-import { NewExpense, Container, Day, Menu, Burger } from "../../components";
+import { NewExpense, Container, Day, MenuBar } from "../../components";
 
 import { State } from "../../App";
 
@@ -11,6 +11,8 @@ import {
   addExpense,
   getRecordsTodayYesterday
 } from "../../firebase/databseActions";
+
+import { logOut } from "../../firebase/authActions";
 
 const MainPage = styled.div`
   margin: 1rem;
@@ -47,19 +49,16 @@ function Main() {
   }
 
   const [active, setActive] = useState("Today");
-  const [menuVisible, setMenuVisible] = useState(false);
+
   const { error: addExpError, loading, saveExpense } = addExpense();
   const { error, getRecords } = getRecordsTodayYesterday();
 
-  const saveNewExpense = async props => {
+  const saveNewExpense = useCallback(async props => {
     await saveExpense(props);
     dispatch({ type: "ADD_EXPENSE", data: props, id: props.id });
-  };
+  }, []);
 
-  const toggleMenu = () => setMenuVisible(v => !v);
-
-  const yesterday = getTime(startOfYesterday());
-  const today = getTime(startOfToday());
+  const handleLogOut = useCallback(() => logOut(dispatch), []);
 
   useEffect(() => {
     const fetchRecords = async () => {
@@ -71,23 +70,22 @@ function Main() {
     fetchRecords();
   }, []);
 
+  const yesterday = getTime(startOfYesterday());
+  const today = getTime(startOfToday());
+
   return (
     <Container justify="space-between" page>
-      <MenuContainer>
-        <Burger toggleMenu={toggleMenu} menuVisible={menuVisible} />
-      </MenuContainer>
-      <Menu isVisible={menuVisible} />
       <MainPage>
         <Day
           active={active === "Yesterday"}
           handleClick={setActive}
-          data={records[yesterday] || []}
+          data={records[yesterday]}
           day="Yesterday"
         />
         <Day
           active={active === "Today"}
           handleClick={setActive}
-          data={records[today] || []}
+          data={records[today]}
           day="Today"
         />
         <Day

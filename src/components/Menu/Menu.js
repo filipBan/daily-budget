@@ -1,6 +1,7 @@
 import React from "react";
 import posed, { PoseGroup } from "react-pose";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 
 const MenuItemPose = posed.button({
   pressable: true,
@@ -36,10 +37,10 @@ const MenuPose = posed.div({
 
 const MenuItem = styled(MenuItemPose)`
   width: 50%;
-  height: 50px;
-  margin: 10px;
+  height: 7rem;
+  margin: 2rem;
   color: #e2e2e2;
-  font-size: 3rem;
+  font-size: 3.5rem;
   background-color: rgba(0, 0, 0, 0);
   border: none;
 
@@ -60,22 +61,31 @@ const Menu = styled(MenuPose)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: 15;
 `;
 
-function MenuOverlay({ isVisible, hide }) {
+function MenuOverlay({ isVisible, close, logOut, location, history }) {
+  const handleRedirect = path => {
+    if (path !== location.pathname) {
+      history.push(path);
+    }
+    close();
+  };
+
   return (
     <PoseGroup>
       {isVisible && (
-        <Menu key="1234">
-          <MenuItem>About us</MenuItem>
-          <MenuItem>Story</MenuItem>
-          <MenuItem>Products</MenuItem>
-          <MenuItem>Prices</MenuItem>
-          <MenuItem>Contact us</MenuItem>
+        <Menu key="menuOverlay">
+          <MenuItem onClick={() => handleRedirect("/main")}>Main</MenuItem>
+          <MenuItem onClick={() => handleRedirect("/budget")}>Budget</MenuItem>
+          <MenuItem onClick={() => handleRedirect("/profile")}>
+            Profile
+          </MenuItem>
+          <MenuItem onClick={logOut}>Log out</MenuItem>
         </Menu>
       )}
     </PoseGroup>
   );
 }
 
-export default React.memo(MenuOverlay);
+export default React.memo(withRouter(MenuOverlay));
